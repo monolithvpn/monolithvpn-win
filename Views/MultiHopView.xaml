@@ -1,0 +1,49 @@
+<UserControl x:Class="MonolithVpnClient.Views.MultiHopView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MonolithVpnClient.Views">
+    <DockPanel>
+        <views:PageHeader DockPanel.Dock="Top" Margin="0,0,0,16" Title="Multi-hop"
+                           Subtitle="Route your traffic through two servers instead of one - the exit server never sees your real IP, only the entry server's."/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Top">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="How it works" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"
+                               Text="Your traffic is encrypted twice and relayed: your device → entry server → exit server → the internet. The exit server (where your traffic appears to come from) only ever sees the entry server as its peer - never your real address."/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"
+                               Text="This adds noticeably more latency than a normal connection, since your traffic now travels through two servers instead of one. Not compatible with Gaming's low-latency exclusions, traffic obfuscation, or a custom endpoint IP while a multi-hop connection is active."/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Entry server" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,10" TextWrapping="Wrap"
+                               Text="Your device connects here first - pick the server closest to you for the best latency."/>
+                    <ComboBox x:Name="EntryCombo" Style="{StaticResource AppComboBox}" DisplayMemberPath="Name"/>
+
+                    <TextBlock Text="Exit server" FontWeight="SemiBold" Foreground="{StaticResource TextHi}" Margin="0,18,0,0"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,10" TextWrapping="Wrap"
+                               Text="Your traffic appears to come from here - pick based on the location/identity you want to appear to browse from."/>
+                    <ComboBox x:Name="ExitCombo" Style="{StaticResource AppComboBox}" DisplayMemberPath="Name"/>
+
+                    <TextBlock x:Name="ValidationText" Foreground="{StaticResource Red}" FontSize="12"
+                               Margin="0,10,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock x:Name="StatusText" Foreground="{StaticResource TextMid}" TextWrapping="Wrap"/>
+                    <Button x:Name="ConnectButton" Content="Connect" Style="{StaticResource PrimaryButton}"
+                            HorizontalAlignment="Left" Height="36" Padding="24,0" Margin="0,12,0,0"
+                            Click="ConnectButton_Click"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

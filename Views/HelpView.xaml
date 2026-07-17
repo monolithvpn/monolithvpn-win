@@ -1,0 +1,49 @@
+<UserControl x:Class="MonolithVpnClient.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MonolithVpnClient.Views">
+    <DockPanel>
+        <views:PageHeader DockPanel.Dock="Top" Margin="0,0,0,16" Title="Help"/>
+
+        <StackPanel VerticalAlignment="Top">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Live chat" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Text="Chat with support in real time on the website." Foreground="{StaticResource TextMid}"
+                               Margin="0,6,0,12" TextWrapping="Wrap"/>
+                    <Button Content="Open live chat" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"
+                            Height="36" Padding="22,0" Click="OpenChat_Click"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Support tickets" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Text="Send us a message or check replies to a ticket you've already opened." Foreground="{StaticResource TextMid}"
+                               Margin="0,6,0,12" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Contact support" Style="{StaticResource OutlineButton}"
+                                Height="36" Padding="22,0" Click="OpenContact_Click"/>
+                        <Button Content="My tickets" Style="{StaticResource OutlineButton}" Margin="10,0,0,0"
+                                Height="36" Padding="22,0" Click="OpenTickets_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Legal" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock>
+                            <Hyperlink Click="OpenTerms_Click">Terms of Service</Hyperlink>
+                        </TextBlock>
+                        <TextBlock Text="  ·  " Foreground="{StaticResource TextLow}"/>
+                        <TextBlock>
+                            <Hyperlink Click="OpenPrivacy_Click">Privacy Policy</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

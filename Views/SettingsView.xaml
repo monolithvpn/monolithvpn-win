@@ -1,0 +1,123 @@
+<UserControl x:Class="MonolithVpnClient.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MonolithVpnClient.Views">
+    <DockPanel>
+        <views:PageHeader DockPanel.Dock="Top" Margin="0,0,0,16" Title="Settings"/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Top">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Connection" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock x:Name="ServerUrlText" Foreground="{StaticResource TextMid}" Margin="0,6,0,0"/>
+                    <TextBlock x:Name="WireGuardStatusText" Foreground="{StaticResource TextMid}" Margin="0,6,0,0"/>
+
+                    <StackPanel x:Name="WireGuardMissingPanel" Visibility="Collapsed" Margin="0,10,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Button x:Name="InstallWireGuardButton" Content="Install WireGuard" Style="{StaticResource PrimaryButton}"
+                                    Height="34" Padding="22,0" Click="InstallWireGuardButton_Click"/>
+                            <TextBlock Text="or" Foreground="{StaticResource TextLow}" VerticalAlignment="Center" Margin="10,0"/>
+                            <TextBlock VerticalAlignment="Center">
+                                <Hyperlink Click="ManualWireGuardLink_Click">download it yourself</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        <TextBlock x:Name="InstallStatusText" Foreground="{StaticResource TextLow}" FontSize="12"
+                                   Margin="0,8,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Devices" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock x:Name="DeviceUsageText" Foreground="{StaticResource TextMid}" Margin="0,6,0,0"/>
+                    <TextBlock Text="We only ever see this device's platform type (e.g. Windows) and a one-way hash of a local device ID - used to count devices toward your plan limit. That hash can't be reversed back into anything identifying, and nothing else about this device is sent to us."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Preferences" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+
+                    <CheckBox x:Name="KillSwitchCheckBox" Content="Kill switch" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="KillSwitchCheckBox_Changed" Unchecked="KillSwitchCheckBox_Changed"/>
+                    <TextBlock Text="Blocks all internet traffic if the tunnel drops unexpectedly, so nothing leaks out unencrypted. Turns off Auto-reconnect - the two work against each other (one blocks and waits for you, the other silently reconnects), so only one can be on at a time."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,4,0,0" TextWrapping="Wrap"/>
+
+                    <CheckBox x:Name="AutoReconnectCheckBox" Content="Auto-reconnect" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="AutoReconnectCheckBox_Changed" Unchecked="AutoReconnectCheckBox_Changed"/>
+                    <TextBlock Text="Automatically reconnect if the tunnel drops unexpectedly, instead of just sitting disconnected. Turns off Kill switch, for the same reason."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,4,0,0" TextWrapping="Wrap"/>
+
+                    <StackPanel x:Name="AutoReconnectIntervalPanel" Margin="26,10,0,0">
+                        <TextBlock Text="Retry every" Foreground="{StaticResource TextMid}" FontSize="12" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="AutoReconnectIntervalCombo" Style="{StaticResource AppComboBox}"
+                                  HorizontalAlignment="Left" MinWidth="200"
+                                  SelectionChanged="AutoReconnectIntervalCombo_SelectionChanged">
+                            <ComboBoxItem Content="30 seconds (default)" Tag="30"/>
+                            <ComboBoxItem Content="1 minute" Tag="60"/>
+                            <ComboBoxItem Content="5 minutes" Tag="300"/>
+                            <ComboBoxItem Content="10 minutes" Tag="600"/>
+                            <ComboBoxItem Content="30 minutes" Tag="1800"/>
+                        </ComboBox>
+                        <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"
+                                   Text="How long to wait between reconnect attempts once a drop is confirmed - it keeps retrying on this interval until it's back, rather than giving up. Pick a longer interval if you suspect the server is under an attack that's still being mitigated, so it isn't hammered with reconnect attempts while it recovers."/>
+                    </StackPanel>
+
+                    <CheckBox x:Name="AutoConnectCheckBox" Content="Auto-connect to last server" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="AutoConnectCheckBox_Changed" Unchecked="AutoConnectCheckBox_Changed"/>
+                    <TextBlock Text="When the app opens, automatically connect to whichever server you were last connected to."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,4,0,0" TextWrapping="Wrap"/>
+
+                    <CheckBox x:Name="StartWithWindowsCheckBox" Content="Start with Windows" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="StartWithWindowsCheckBox_Changed" Unchecked="StartWithWindowsCheckBox_Changed"/>
+                    <TextBlock Text="Launch MonolithVPN automatically when you sign in to Windows."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,4,0,0" TextWrapping="Wrap"/>
+
+                    <CheckBox x:Name="ObfuscationCheckBox" Content="Traffic obfuscation (Beta)" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="ObfuscationCheckBox_Changed" Unchecked="ObfuscationCheckBox_Changed"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,4,0,0" TextWrapping="Wrap"
+                               Text="Disguises your VPN traffic as ordinary web traffic, so networks that try to detect and block VPN connections see what looks like a normal HTTPS connection instead."/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,6,0,0" TextWrapping="Wrap">
+                        <Run Text="Pros:" FontWeight="SemiBold"/>
+                        <Run Text="harder to detect/block on restrictive networks (school, work, some countries)."/>
+                    </TextBlock>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,2,0,0" TextWrapping="Wrap">
+                        <Run Text="Cons:" FontWeight="SemiBold"/>
+                        <Run Text="slightly slower and a bit more latency, and it requires a one-time Npcap install (a standard, widely-used packet-capture driver - the same thing tools like Wireshark use)."/>
+                    </TextBlock>
+                    <TextBlock Foreground="{StaticResource Red}" FontSize="12" Margin="26,6,0,0" TextWrapping="Wrap" FontWeight="SemiBold"
+                               Text="Beta: this is new and hasn't been fully verified yet - it may be less reliable than a normal connection. If sites stop loading while this is on, turn it off and reconnect."/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="26,6,0,0" TextWrapping="Wrap"
+                               Text="Leave this off unless you're on a network that actively blocks VPNs - most people never need it."/>
+                    <TextBlock x:Name="ObfuscationStatusText" Foreground="{StaticResource TextLow}" FontSize="12"
+                               Margin="26,8,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="About" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock x:Name="VersionText" Foreground="{StaticResource TextMid}" Margin="0,6,0,0"/>
+                    <TextBlock Text="Account changes (registration, password recovery) are handled on the website only."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,10,0,12" TextWrapping="Wrap"/>
+
+                    <Button x:Name="CheckUpdateButton" Content="Check for updates" Style="{StaticResource OutlineButton}"
+                            HorizontalAlignment="Left" Height="34" Click="CheckUpdateButton_Click"/>
+                    <StackPanel x:Name="UpdatePanel" Visibility="Collapsed" Margin="0,12,0,0">
+                        <TextBlock x:Name="UpdateTitleText" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                        <TextBlock x:Name="UpdateNotesText" Foreground="{StaticResource TextMid}" FontSize="12"
+                                   Margin="0,4,0,10" TextWrapping="Wrap"/>
+                        <Button x:Name="DownloadUpdateButton" Content="Update now" Style="{StaticResource PrimaryButton}"
+                                HorizontalAlignment="Left" Height="34" Click="DownloadUpdateButton_Click"/>
+                    </StackPanel>
+                    <TextBlock x:Name="UpdateStatusText" Foreground="{StaticResource TextLow}" FontSize="12"
+                               Margin="0,10,0,0" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

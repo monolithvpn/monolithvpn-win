@@ -1,0 +1,8 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DropShadowEffect x:Key="ShadowSoft" BlurRadius="12" ShadowDepth="2" Opacity="0.18" Color="Black" Direction="270"/>
+
+    <DropShadowEffect x:Key="ShadowPopup" BlurRadius="18" ShadowDepth="4" Opacity="0.4" Color="Black" Direction="270"/>
+
+</ResourceDictionary>

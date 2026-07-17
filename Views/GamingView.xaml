@@ -1,0 +1,74 @@
+<UserControl x:Class="MonolithVpnClient.Views.GamingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MonolithVpnClient.Views">
+    <DockPanel>
+        <views:PageHeader DockPanel.Dock="Top" Margin="0,0,0,16" Title="Gaming"
+                           Subtitle="Cut VPN latency for specific games' servers."/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Top">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Low latency" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"
+                               Text="Sends the games you pick below straight out your regular connection instead of through the tunnel, so the VPN's extra hop doesn't add latency to them. Everything else you do still goes through the VPN as normal."/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"
+                               Text="Games with only known ports (not IPs) use a bundled driver called WinDivert to redirect just their UDP traffic - an established open-source tool, not something we wrote from scratch. TCP traffic for those games stays on the VPN as normal."/>
+                    <TextBlock Foreground="{StaticResource Amber}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap" FontWeight="SemiBold"
+                               Text="Your real IP is visible to whatever you exclude here - that's the tradeoff for the lower latency. Only turn this on for games/apps you're fine showing your actual connection to."/>
+
+                    <CheckBox x:Name="LowLatencyCheckBox" Content="Low latency" Style="{StaticResource AppCheckBox}"
+                              Margin="0,14,0,0" Checked="LowLatencyCheckBox_Changed" Unchecked="LowLatencyCheckBox_Changed"/>
+                    <TextBlock Text="Takes effect the next time you connect." Foreground="{StaticResource TextLow}"
+                               FontSize="12" Margin="26,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Games" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,12" TextWrapping="Wrap"
+                               Text="Pick which games' server ranges should bypass the VPN. These lists are maintained on our end and fetched fresh here - nothing is stored permanently on your device."/>
+                    <TextBlock x:Name="GamesLoadingText" Text="Loading games..." Foreground="{StaticResource TextLow}" FontSize="12"/>
+                    <TextBlock x:Name="GamesEmptyText" Text="No games are configured yet - check back later."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Visibility="Collapsed"/>
+                    <TextBlock x:Name="GamesErrorText" Foreground="{StaticResource Red}" FontSize="12"
+                               Visibility="Collapsed" TextWrapping="Wrap"/>
+                    <ItemsControl x:Name="GamesList"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Advanced: your own ranges" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,8" TextWrapping="Wrap"
+                               Text="For a game that isn't listed above - one address/range per line, e.g. 203.0.113.4 or 203.0.113.0/24."/>
+                    <TextBox x:Name="CustomRangesBox" Style="{StaticResource AppTextBox}" AcceptsReturn="True"
+                             TextWrapping="Wrap" Height="70" VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top"/>
+                    <Button x:Name="SaveCustomRangesButton" Content="Save" Style="{StaticResource OutlineButton}"
+                            HorizontalAlignment="Left" Height="30" Padding="16,0" Margin="0,8,0,0"
+                            Click="SaveCustomRangesButton_Click"/>
+                    <TextBlock x:Name="CustomRangesStatusText" FontSize="12" Margin="0,8,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Apps" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,8" TextWrapping="Wrap"
+                               Text="Pick specific applications to bypass the VPN entirely, regardless of what they connect to - useful for a game (or launcher) not covered by the lists above. Takes effect the next time you connect; the app can be closed or not yet running when you pick it. Same tradeoff as above: anything an added app connects to sees your real IP, not the VPN's."/>
+                    <TextBlock x:Name="AppsEmptyText" Text="No applications added yet." Foreground="{StaticResource TextLow}" FontSize="12"/>
+                    <ItemsControl x:Name="AppsList"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button x:Name="AddAppButton" Content="Add application..." Style="{StaticResource OutlineButton}"
+                                Height="30" Padding="16,0" Click="AddAppButton_Click"/>
+                        <Button x:Name="PickRunningAppButton" Content="Pick from running programs..." Style="{StaticResource OutlineButton}"
+                                Height="30" Padding="16,0" Margin="8,0,0,0" Click="PickRunningAppButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

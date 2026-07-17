@@ -1,0 +1,185 @@
+<UserControl x:Class="MonolithVpnClient.Views.SharingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MonolithVpnClient.Views">
+    <DockPanel>
+        <views:PageHeader DockPanel.Dock="Top" Margin="0,0,0,16" Title="Sharing"/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Top">
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Mobile hotspot" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                        <Button Style="{StaticResource HelpHintButton}" Margin="8,0,0,0" Click="HelpHint_Click"
+                                ToolTip="This creates a WiFi network other devices (like a game console) can join to use this PC's internet connection. Needs a WiFi adapter that supports hosting a hotspot."/>
+                    </StackPanel>
+                    <TextBlock Text="Get a console or another device online through this PC's WiFi adapter - works whether you're connected to a VPN server or not."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"/>
+
+                    <TextBlock x:Name="HotspotUnsupportedText" Foreground="{StaticResource TextLow}" FontSize="12"
+                               Margin="0,10,0,0" TextWrapping="Wrap" Visibility="Collapsed"
+                               Text="This PC doesn't support hosting a WiFi hotspot (no compatible WiFi adapter, or no active internet connection yet)."/>
+
+                    <TextBlock x:Name="HotspotWiFiUplinkWarning" Foreground="{StaticResource Amber}" FontSize="12"
+                               Margin="0,10,0,0" TextWrapping="Wrap" Visibility="Collapsed"
+                               Text="Your internet connection is over WiFi. Hosting a hotspot uses that same WiFi radio to both stay connected and broadcast to other devices, which isn't supported on all WiFi hardware - if this causes your WiFi to drop, an Ethernet internet connection avoids the issue entirely."/>
+
+                    <StackPanel x:Name="HotspotPanel" Margin="0,14,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="Hotspot name (SSID)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
+                                <TextBox x:Name="HotspotSsidBox" Style="{StaticResource AppTextBox}" Text="MonolithVPN"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <TextBlock Text="Password (WPA2, 8+ characters)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <PasswordBox x:Name="HotspotPasswordBox" Style="{StaticResource AppPasswordBox}"/>
+                                        <TextBox x:Name="HotspotPasswordVisibleBox" Style="{StaticResource AppTextBox}"
+                                                 Visibility="Collapsed" TextChanged="HotspotPasswordVisibleBox_TextChanged"/>
+                                    </Grid>
+                                    <Button x:Name="HotspotShowPasswordButton" Content="Show" Style="{StaticResource OutlineButton}"
+                                            Grid.Column="1" Height="40" Padding="12,0" Margin="8,0,0,0"
+                                            Click="HotspotShowPasswordButton_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Password can be revealed locally - anyone with access to this PC could see it while shown."
+                                   Foreground="{StaticResource TextLow}" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <Button x:Name="HotspotToggleButton" Content="Start hotspot" Style="{StaticResource PrimaryButton}"
+                                    Height="34" Click="HotspotToggleButton_Click"/>
+                            <Button x:Name="HotspotSaveButton" Content="Save" Style="{StaticResource OutlineButton}"
+                                    Height="34" Margin="10,0,0,0" Click="HotspotSaveButton_Click"/>
+                        </StackPanel>
+                        <TextBlock x:Name="HotspotStatusText" Foreground="{StaticResource TextLow}" FontSize="12"
+                                   Margin="0,10,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Ethernet sharing (bridge)" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                        <Border Style="{StaticResource StatusBadgeAmber}" Margin="8,0,0,0">
+                            <TextBlock Text="Beta" FontSize="10" Foreground="{StaticResource Amber}"/>
+                        </Border>
+                        <Button Style="{StaticResource HelpHintButton}" Margin="8,0,0,0" Click="HelpHint_Click"
+                                ToolTip="Shares this PC's internet connection to a device plugged in by Ethernet - the same thing as Windows' own 'Internet Connection Sharing'. Pick the adapter that has internet (Public) and the one going to the console/device (Private), then Enable Sharing."/>
+                    </StackPanel>
+                    <TextBlock Text="Bridge this PC's internet connection to a console or device connected by Ethernet cable. This automates Windows' built-in Internet Connection Sharing - it's new, so double-check the result if something looks off."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,16" TextWrapping="Wrap">
+                        <Run Text="If you pick your VPN connection as the Public adapter, it fails closed like a kill switch: " FontWeight="SemiBold"/>
+                        <Run Text="if the VPN drops, the shared device loses internet instead of leaking your real IP - reconnect the VPN and sharing resumes automatically, no extra steps needed."/>
+                    </TextBlock>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Public adapter (internet source)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox x:Name="PublicAdapterCombo" Style="{StaticResource AppComboBox}"
+                                      DisplayMemberPath="DisplayName" SelectionChanged="AdapterCombo_SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="Private adapter (to console/device)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox x:Name="PrivateAdapterCombo" Style="{StaticResource AppComboBox}"
+                                      DisplayMemberPath="DisplayName" SelectionChanged="AdapterCombo_SelectionChanged"/>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Foreground="{StaticResource TextLow}" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap"
+                               Text="We've pre-picked the most likely adapters based on which one currently has internet - double-check they match before enabling."/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button x:Name="SharingToggleButton" Content="Enable Sharing" Style="{StaticResource PrimaryButton}"
+                                Height="34" Click="SharingToggleButton_Click"/>
+                        <Button x:Name="SharingResetButton" Content="Reset" Style="{StaticResource OutlineButton}"
+                                Height="34" Margin="10,0,0,0" Click="SharingResetButton_Click"/>
+                        <Button x:Name="ToggleAdaptersTableButton" Content="Show all adapters" Style="{StaticResource OutlineButton}"
+                                Height="34" Margin="10,0,0,0" Click="ToggleAdaptersTableButton_Click"/>
+                        <Button x:Name="RefreshAdaptersButton" Content="Refresh adapters" Style="{StaticResource OutlineButton}"
+                                Height="34" Margin="10,0,0,0" Click="RefreshAdaptersButton_Click"/>
+                    </StackPanel>
+                    <TextBlock x:Name="SharingStatusText" Foreground="{StaticResource TextLow}" FontSize="12"
+                               Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+                    <StackPanel x:Name="AdaptersTablePanel" Margin="0,14,0,0" Visibility="Collapsed">
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Adapter" Foreground="{StaticResource TextLow}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Text="Enabled" Foreground="{StaticResource TextLow}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="2" Text="Type" Foreground="{StaticResource TextLow}" FontSize="11" FontWeight="SemiBold"/>
+                        </Grid>
+                        <ItemsControl x:Name="AdaptersList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{StaticResource BorderSoft}" BorderThickness="0,0,0,1" Padding="0,6">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextHi}"
+                                                           FontSize="12.5" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding Description}" Foreground="{StaticResource TextLow}"
+                                                           FontSize="11" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="{Binding EnabledText}" Foreground="{StaticResource TextMid}" FontSize="12"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding TypeLabel}" Foreground="{StaticResource TextMid}" FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Connected devices" FontWeight="SemiBold" Foreground="{StaticResource TextHi}"/>
+                    <TextBlock Text="Devices currently connected through either the hotspot or the Ethernet bridge above."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,6,0,12" TextWrapping="Wrap"/>
+                    <ItemsControl x:Name="ConnectedDevicesList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                    <Ellipse Width="6" Height="6" Fill="{StaticResource Green}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding IpAddress}" Foreground="{StaticResource TextHi}"
+                                               FontSize="12.5" Margin="8,0,0,0"/>
+                                    <TextBlock Text="{Binding MacAddress}" Foreground="{StaticResource TextLow}"
+                                               FontSize="11" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock x:Name="NoDevicesText" Text="No connected devices detected yet."
+                               Foreground="{StaticResource TextLow}" FontSize="12" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MonolithVpnClient</RootNamespace>
+    <AssemblyName>MonolithVPN</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+
+    <AssemblyTitle>MonolithVPN</AssemblyTitle>
+    <Product>MonolithVPN</Product>
+    <Company>MonolithVPN</Company>
+    <Description>MonolithVPN Windows client - connect to your VPN servers.</Description>
+    <Copyright>Copyright © 2026 MonolithVPN</Copyright>
+    <Version>1.4.28</Version>
+    <FileVersion>1.4.28.0</FileVersion>
+    <AssemblyVersion>1.4.28.0</AssemblyVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\udp2raw\udp2raw_mp.exe" LogicalName="udp2raw_mp.exe"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\windivert\WinDivert.dll" LogicalName="WinDivert.dll"/>
+    <EmbeddedResource Include="Assets\windivert\WinDivert64.sys" LogicalName="WinDivert64.sys"/>
+    <EmbeddedResource Include="Assets\windivert\WinDivert-LICENSE.txt" LogicalName="WinDivert-LICENSE.txt"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms"/>
+  </ItemGroup>
+
+</Project>

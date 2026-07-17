@@ -1,0 +1,6 @@
+bin/
+obj/
+publish_output/
+*.user
+.vs/
+*.pdb
