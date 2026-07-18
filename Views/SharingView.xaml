@@ -94,12 +94,24 @@
                         <StackPanel Grid.Column="0" Margin="0,0,8,0">
                             <TextBlock Text="Public adapter (internet source)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
                             <ComboBox x:Name="PublicAdapterCombo" Style="{StaticResource AppComboBox}"
-                                      DisplayMemberPath="DisplayName" SelectionChanged="AdapterCombo_SelectionChanged"/>
+                                      SelectionChanged="AdapterCombo_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayName}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Margin="8,0,0,0">
                             <TextBlock Text="Private adapter (to console/device)" Foreground="{StaticResource TextLow}" FontSize="12" Margin="0,0,0,4"/>
                             <ComboBox x:Name="PrivateAdapterCombo" Style="{StaticResource AppComboBox}"
-                                      DisplayMemberPath="DisplayName" SelectionChanged="AdapterCombo_SelectionChanged"/>
+                                      SelectionChanged="AdapterCombo_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayName}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                     </Grid>
                     <TextBlock Foreground="{StaticResource TextLow}" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap"

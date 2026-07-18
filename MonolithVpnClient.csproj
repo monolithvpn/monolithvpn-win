@@ -18,9 +18,9 @@
     <Company>MonolithVPN</Company>
     <Description>MonolithVPN Windows client - connect to your VPN servers.</Description>
     <Copyright>Copyright © 2026 MonolithVPN</Copyright>
-    <Version>1.4.28</Version>
-    <FileVersion>1.4.28.0</FileVersion>
-    <AssemblyVersion>1.4.28.0</AssemblyVersion>
+    <Version>1.4.30</Version>
+    <FileVersion>1.4.30.0</FileVersion>
+    <AssemblyVersion>1.4.30.0</AssemblyVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
